@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Map API</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBHqg2GHjs1qg7uA-OPSMamqJT7KcyUEBI"></script>
+    <script th:inline="javascript">
+        var locations = /*[[${locations}]]*/ [];
+    </script>
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Map API</h1>
+    <div id="map"></div>
+    <table>
+        <thead>
+            <tr>
+                <th>Lat</th>
+                <th>Long</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="location : ${locations}">
+                <td th:text="${location.lat}"></td>
+                <td th:text="${location.lng}"></td>
+                <td th:text="${location.name}"></td>
+            </tr>
+        </tbody>
+    </table>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var mapOptions = {
+                center: { lat: 0, lng: 0 }, // Set the initial map center
+                zoom: 8 // Set the initial zoom level
+            };
+
+            var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+            var locations = /*[[${locations}]]*/ [];
+
+            locations.forEach(function(location) {
+                var marker = new google.maps.Marker({
+                    position: { lat: location.lat, lng: location.lng },
+                    map: map,
+                    title: location.name
+                });
+            });
+        });
+    </script>
+</body>
+</html>
